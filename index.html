@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registro Quinzenal · Espaço Junior</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F5F4F1;color:#1a1a1a;min-height:100vh}
+  .topbar{background:#534AB7;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+  .topbar-title{color:#fff;font-size:15px;font-weight:600;letter-spacing:.01em}
+  .topbar-sub{color:#C8C4F4;font-size:12px}
+  .container{max-width:680px;margin:0 auto;padding:20px 16px 60px}
+  .page-title{font-size:22px;font-weight:600;color:#1a1a1a;margin:24px 0 4px}
+  .page-sub{font-size:13px;color:#666;margin-bottom:20px}
+  .meta-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+  .field{margin-bottom:10px}
+  .field label{display:block;font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
+  input[type=text],textarea,select{width:100%;font-size:14px;border:1px solid #E0DED8;border-radius:8px;padding:9px 12px;background:#fff;color:#1a1a1a;font-family:inherit;line-height:1.5;transition:border-color .15s}
+  input[type=text]:focus,textarea:focus{outline:none;border-color:#534AB7;box-shadow:0 0 0 3px rgba(83,74,183,.08)}
+  textarea{resize:vertical}
+  textarea::placeholder,input::placeholder{color:#bbb;font-style:italic}
+  .sec-label{font-size:11px;font-weight:700;letter-spacing:.08em;color:#888;text-transform:uppercase;margin:24px 0 10px;display:flex;align-items:center;gap:10px}
+  .sec-label::after{content:'';flex:1;height:1px;background:#E0DED8}
+  .card{background:#fff;border:1px solid #E8E6E0;border-radius:12px;margin-bottom:8px;overflow:hidden}
+  .card-hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;user-select:none;background:#fff}
+  .card-hdr:hover{background:#FAFAF8}
+  .card-left{display:flex;align-items:center;gap:10px}
+  .dot{width:8px;height:8px;border-radius:50%;background:#D9D6CE;flex-shrink:0}
+  .dot.ok{background:#1D9E75}
+  .card-title{font-size:14px;font-weight:500;color:#1a1a1a}
+  .card-date{font-size:12px;color:#999}
+  .chev{font-size:11px;color:#bbb;transition:transform .15s}
+  .chev.open{transform:rotate(180deg)}
+  .card-body{display:none;padding:14px 16px;border-top:1px solid #F0EEE8}
+  .card-body.open{display:block}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .feriado{background:#FFF8E6;border:1px solid #F5D87A;border-radius:8px;padding:11px 14px;font-size:13px;color:#7A5A00;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+  .feriado-icon{font-size:14px}
+  .fech-card{background:#fff;border:1px solid #AFA9EC;border-radius:12px;margin-bottom:8px;overflow:hidden}
+  .fech-hdr{padding:12px 16px;background:#EEEDFE;cursor:pointer;user-select:none;display:flex;align-items:center;justify-content:space-between}
+  .fech-hdr-title{font-size:14px;font-weight:500;color:#3C3489}
+  .fech-body{display:none;padding:14px 16px;border-top:1px solid #D8D4F5}
+  .fech-body.open{display:block}
+  .fech-q{display:flex;gap:10px;margin-bottom:12px}
+  .fech-num{width:22px;height:22px;border-radius:50%;background:#AFA9EC;color:#26215C;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+  .fech-inner label{font-size:13px;font-weight:500;color:#2a2a2a;margin-bottom:3px;display:block}
+  .hint{font-size:11px;color:#aaa;font-style:italic;margin-bottom:5px}
+  .qfin-card{background:#fff;border:1px solid #5DCAA5;border-radius:12px;margin-bottom:8px;overflow:hidden}
+  .qfin-hdr{padding:12px 16px;background:#E1F5EE;cursor:pointer;user-select:none;display:flex;align-items:center;justify-content:space-between}
+  .qfin-hdr-title{font-size:14px;font-weight:500;color:#085041}
+  .qfin-body{display:none;padding:14px 16px;border-top:1px solid #9FE1CB}
+  .qfin-body.open{display:block}
+  .qfin-num{width:22px;height:22px;border-radius:50%;background:#5DCAA5;color:#04342C;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+  .btn-wrap{margin-top:20px;display:flex;gap:10px;flex-wrap:wrap}
+  .btn{padding:10px 20px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;border:none;transition:opacity .15s}
+  .btn:active{opacity:.8}
+  .btn-primary{background:#534AB7;color:#fff}
+  .btn-secondary{background:#F0EEE8;color:#444;border:1px solid #E0DED8}
+  .toast{margin-top:12px;padding:12px 16px;background:#E1F5EE;border:1px solid #5DCAA5;border-radius:8px;font-size:13px;color:#085041;display:none}
+  .loading{margin-top:12px;font-size:13px;color:#888;display:none}
+  @media(max-width:480px){.meta-row,.row2{grid-template-columns:1fr}.topbar{padding:12px 16px}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div>
+    <div class="topbar-title">Espaço Junior</div>
+    <div class="topbar-sub">Registro quinzenal de atividades</div>
+  </div>
+  <div style="color:#C8C4F4;font-size:12px">27/04 – 08/05</div>
+</div>
+
+<div class="container">
+  <div class="page-title">Olá! Preencha seu registro</div>
+  <p class="page-sub">Registre dia a dia o que foi feito. Complete os fechamentos toda sexta até as 17h.</p>
+
+  <div class="meta-row">
+    <div class="field"><label>Nome completo</label><input type="text" id="f-nome" placeholder="Seu nome"></div>
+    <div class="field"><label>Cargo / unidade</label><input type="text" id="f-cargo" placeholder="Ex: Recepcionista – Joinville 1"></div>
+  </div>
+
+  <div class="sec-label">Semana 1 · 27/04 a 01/05</div>
+  <div id="days-s1"></div>
+  <div id="fech-s1-wrap"></div>
+
+  <div class="sec-label">Semana 2 · 04/05 a 08/05</div>
+  <div id="days-s2"></div>
+  <div id="fech-s2-wrap"></div>
+
+  <div class="sec-label">Fechamento da quinzena</div>
+  <div class="qfin-card">
+    <div class="qfin-hdr" onclick="tog('qfin-body','chev-qfin')">
+      <span class="qfin-hdr-title">Reflexão quinzenal · entregar em 09/05</span>
+      <span class="chev" id="chev-qfin">▼</span>
+    </div>
+    <div class="qfin-body" id="qfin-body"></div>
+  </div>
+
+  <div id="draft-badge" style="display:none;font-size:12px;color:#0F6E56;background:#E1F5EE;border:1px solid #5DCAA5;border-radius:6px;padding:5px 12px;margin-bottom:10px;width:fit-content"></div>
+  <div class="btn-wrap">
+    <button class="btn btn-primary" onclick="salvar()">Enviar registro</button>
+    <button class="btn btn-secondary" onclick="limpar()">Limpar tudo</button>
+  </div>
+  <div class="loading" id="loading">Enviando...</div>
+  <div class="toast" id="toast">Registro enviado com sucesso! Obrigado.</div>
+</div>
+
+<script>
+const BIN_ID = window.JSONBIN_ID || '';
+const API_KEY = window.JSONBIN_KEY || '';
+
+const SEMANAS = [
+  {id:'s1', label:'Semana 1', sexta:'30/04', dias:[
+    {d:'Segunda',dt:'27/04'},{d:'Terça',dt:'28/04'},{d:'Quarta',dt:'29/04'},
+    {d:'Quinta',dt:'30/04'},{d:'Sexta',dt:'01/05',feriado:true}
+  ]},
+  {id:'s2', label:'Semana 2', sexta:'08/05', dias:[
+    {d:'Segunda',dt:'04/05'},{d:'Terça',dt:'05/05'},{d:'Quarta',dt:'06/05'},
+    {d:'Quinta',dt:'07/05'},{d:'Sexta',dt:'08/05'}
+  ]}
+];
+
+const FECH = [
+  ['entrega','Principal entrega da semana','Impacto real para o paciente, time ou negócio'],
+  ['naofoi','O que não foi possível e por quê','Motivo real: volume, fila, dependência, falta de recurso'],
+  ['obstaculo','Maior obstáculo da semana','O que travou ou consumiu energia desnecessária?'],
+  ['prioridades','Três prioridades para a próxima semana','Seja específico — evite itens vagos'],
+  ['lideranca','Precisa de algo da liderança?','Decisão ou desbloqueio concreto']
+];
+
+const QFIN = [
+  ['q1','Balanço geral das duas semanas','O que avançou de verdade? Onde o tempo foi bem investido ou desperdiçado?'],
+  ['q2','Resultado gerado para o negócio','O que o Espaço Junior tem hoje que não tinha há 15 dias por causa do seu trabalho?'],
+  ['q3','O que se repetiu e não deveria','Problemas recorrentes ou retrabalhos que precisam de solução definitiva'],
+  ['q4','Capacidade e volume de trabalho','Terminou com demandas represadas ou com folga? Onde está o gargalo?'],
+  ['q5','O que faria diferente','O que mudaria na ordem, foco ou forma de trabalhar?'],
+  ['q6','Principal prioridade para as próximas duas semanas','Se só uma coisa pudesse avançar, qual teria maior impacto?'],
+  ['q7','O que precisa da liderança para desbloquear','Decisão, recurso ou alinhamento concreto']
+];
+
+function tog(bodyId, chevId) {
+  const b = document.getElementById(bodyId);
+  const c = document.getElementById(chevId);
+  const open = b.classList.contains('open');
+  b.classList.toggle('open', !open);
+  if(c) c.classList.toggle('open', !open);
+}
+
+function dotCheck(uid) {
+  const v = document.getElementById('feito-'+uid);
+  if(v) document.getElementById('dot-'+uid).classList.toggle('ok', v.value.trim().length > 0);
+}
+
+function buildForm() {
+  SEMANAS.forEach(sem => {
+    const cont = document.getElementById('days-'+sem.id);
+    sem.dias.forEach((dia, i) => {
+      if(dia.feriado) {
+        const f = document.createElement('div');
+        f.className = 'feriado';
+        f.innerHTML = '<span class="feriado-icon">★</span><span><b>'+dia.d+' '+dia.dt+'</b> — Feriado · Dia do Trabalho</span>';
+        cont.appendChild(f); return;
+      }
+      const uid = sem.id+'-'+i;
+      const c = document.createElement('div');
+      c.className = 'card';
+      c.innerHTML = `
+        <div class="card-hdr" onclick="tog('db-${uid}','chev-${uid}')">
+          <div class="card-left">
+            <span class="dot" id="dot-${uid}"></span>
+            <span class="card-title">${dia.d}</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span class="card-date">${dia.dt}</span>
+            <span class="chev" id="chev-${uid}">▼</span>
+          </div>
+        </div>
+        <div class="card-body" id="db-${uid}">
+          <div class="field"><label>O que foi feito</label>
+            <textarea id="feito-${uid}" rows="3" placeholder="Uma atividade por linha&#10;Ex: Agendamento de 12 pacientes Unimed&#10;Ex: Conferência de guias lote 047" oninput="dotCheck('${uid}')"></textarea>
+          </div>
+          <div class="row2">
+            <div class="field"><label>Volume / quantidade</label>
+              <textarea id="vol-${uid}" rows="2" placeholder="Atendimentos, guias, contatos..."></textarea>
+            </div>
+            <div class="field"><label>Imprevistos</label>
+              <textarea id="imp-${uid}" rows="2" placeholder="O que surgiu fora do planejado?"></textarea>
+            </div>
+          </div>
+          <div class="field"><label>Pendências abertas</label>
+            <textarea id="pend-${uid}" rows="2" placeholder="O que ficou aberto? Por quê?"></textarea>
+          </div>
+        </div>`;
+      cont.appendChild(c);
+    });
+
+    const fw = document.getElementById('fech-'+sem.id+'-wrap');
+    const fc = document.createElement('div');
+    fc.className = 'fech-card';
+    let items = '';
+    FECH.forEach(([fid,lbl,hint], n) => {
+      items += `<div class="fech-q">
+        <div class="fech-num">${n+1}</div>
+        <div class="fech-inner" style="flex:1">
+          <label>${lbl}</label>
+          <div class="hint">${hint}</div>
+          <textarea id="f-${sem.id}-${fid}" rows="2" placeholder=""></textarea>
+        </div>
+      </div>`;
+    });
+    fc.innerHTML = `
+      <div class="fech-hdr" onclick="tog('fb-${sem.id}','chev-fb-${sem.id}')">
+        <span class="fech-hdr-title">Fechamento de sexta · ${sem.label} (${sem.sexta})</span>
+        <span class="chev" id="chev-fb-${sem.id}">▼</span>
+      </div>
+      <div class="fech-body" id="fb-${sem.id}">${items}</div>`;
+    fw.appendChild(fc);
+  });
+
+  const qb = document.getElementById('qfin-body');
+  let qhtml = '';
+  QFIN.forEach(([qid,lbl,hint], n) => {
+    qhtml += `<div class="fech-q">
+      <div class="qfin-num">${n+1}</div>
+      <div class="fech-inner" style="flex:1">
+        <label>${lbl}</label>
+        <div class="hint">${hint}</div>
+        <textarea id="q-${qid}" rows="2" placeholder=""></textarea>
+      </div>
+    </div>`;
+  });
+  qb.innerHTML = qhtml;
+}
+
+function coleta() {
+  const data = {
+    nome: document.getElementById('f-nome').value.trim(),
+    cargo: document.getElementById('f-cargo').value.trim(),
+    ts: new Date().toISOString(),
+    dias: {}, fechS1: {}, fechS2: {}, quinzenal: {}
+  };
+  SEMANAS.forEach(sem => {
+    sem.dias.forEach((dia, i) => {
+      if(dia.feriado) return;
+      const uid = sem.id+'-'+i;
+      data.dias[uid] = {
+        dia: dia.d, dt: dia.dt, sem: sem.id,
+        feito: document.getElementById('feito-'+uid)?.value.trim()||'',
+        vol: document.getElementById('vol-'+uid)?.value.trim()||'',
+        imp: document.getElementById('imp-'+uid)?.value.trim()||'',
+        pend: document.getElementById('pend-'+uid)?.value.trim()||''
+      };
+    });
+    const target = sem.id==='s1' ? data.fechS1 : data.fechS2;
+    FECH.forEach(([fid]) => { target[fid] = document.getElementById('f-'+sem.id+'-'+fid)?.value.trim()||''; });
+  });
+  QFIN.forEach(([qid]) => { data.quinzenal[qid] = document.getElementById('q-'+qid)?.value.trim()||''; });
+  return data;
+}
+
+async function salvar() {
+  const d = coleta();
+  if(!d.nome) { alert('Por favor, preencha seu nome antes de enviar.'); return; }
+
+  const loading = document.getElementById('loading');
+  const toast = document.getElementById('toast');
+  loading.style.display = 'block';
+
+  try {
+    // Busca registros existentes
+    const getRes = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+      headers: { 'X-Master-Key': API_KEY }
+    });
+    const existing = await getRes.json();
+    const registros = existing.record?.registros || [];
+    registros.push(d);
+
+    // Salva atualizado
+    await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
+      body: JSON.stringify({ registros })
+    });
+
+    loading.style.display = 'none';
+    toast.style.display = 'block';
+    localStorage.removeItem(DRAFT_KEY);
+    updateDraftBadge();
+    setTimeout(() => toast.style.display = 'none', 5000);
+  } catch(e) {
+    loading.style.display = 'none';
+    alert('Erro ao enviar. Verifique sua conexão e tente novamente.');
+  }
+}
+
+const DRAFT_KEY = 'ej_registro_draft';
+
+function autoSave() {
+  const d = coleta();
+  try { localStorage.setItem(DRAFT_KEY, JSON.stringify(d)); } catch(e){}
+  updateDraftBadge();
+}
+
+function updateDraftBadge() {
+  const badge = document.getElementById('draft-badge');
+  if(!badge) return;
+  const raw = localStorage.getItem(DRAFT_KEY);
+  if(!raw) { badge.style.display='none'; return; }
+  try {
+    const d = JSON.parse(raw);
+    const diasPreenchidos = Object.values(d.dias||{}).filter(x=>x.feito).length;
+    if(diasPreenchidos > 0 || d.nome) {
+      badge.style.display='inline-block';
+      badge.textContent = diasPreenchidos > 0 ? "Rascunho salvo · " + diasPreenchidos + " dia" + (diasPreenchidos>1?"s preenchidos":" preenchido") : "Rascunho salvo";
+    } else { badge.style.display="none"; }
+  } catch(e){}
+}
+
+function restaurarDraft() {
+  const raw = localStorage.getItem(DRAFT_KEY);
+  if(!raw) return;
+  try {
+    const d = JSON.parse(raw);
+    if(d.nome) document.getElementById("f-nome").value = d.nome;
+    if(d.cargo) document.getElementById("f-cargo").value = d.cargo;
+    if(d.dias) {
+      Object.entries(d.dias).forEach(([uid,v]) => {
+        const f = document.getElementById("feito-"+uid); if(f&&v.feito){ f.value=v.feito; dotCheck(uid); }
+        const vol = document.getElementById("vol-"+uid); if(vol&&v.vol) vol.value=v.vol;
+        const imp = document.getElementById("imp-"+uid); if(imp&&v.imp) imp.value=v.imp;
+        const pend = document.getElementById("pend-"+uid); if(pend&&v.pend) pend.value=v.pend;
+      });
+    }
+    SEMANAS.forEach(sem => {
+      const fb = sem.id==="s1"?d.fechS1:d.fechS2;
+      if(fb) FECH.forEach(([fid])=>{ const el=document.getElementById("f-"+sem.id+"-"+fid); if(el&&fb[fid]) el.value=fb[fid]; });
+    });
+    if(d.quinzenal) QFIN.forEach(([qid])=>{ const el=document.getElementById("q-"+qid); if(el&&d.quinzenal[qid]) el.value=d.quinzenal[qid]; });
+    updateDraftBadge();
+  } catch(e){}
+}
+
+function limpar() {
+  if(!confirm("Limpar todos os campos e apagar rascunho?")) return;
+  document.querySelectorAll("textarea, input[type=text]").forEach(el => el.value = "");
+  document.querySelectorAll(".dot").forEach(d => d.classList.remove("ok"));
+  localStorage.removeItem(DRAFT_KEY);
+  updateDraftBadge();
+}
+
+buildForm();
+setTimeout(() => {
+  restaurarDraft();
+  document.querySelectorAll("textarea, input[type=text]").forEach(el => {
+    el.addEventListener("input", autoSave);
+  });
+}, 100);
+</script>
+</body>
+</html>

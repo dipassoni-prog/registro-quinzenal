@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel do Gestor · Espaço Junior</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F5F4F1;color:#1a1a1a;min-height:100vh}
+  .topbar{background:#534AB7;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+  .topbar-title{color:#fff;font-size:15px;font-weight:600}
+  .topbar-sub{color:#C8C4F4;font-size:12px}
+  .topbar-link{color:#C8C4F4;font-size:12px;text-decoration:none;border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:4px 10px}
+  .topbar-link:hover{background:rgba(255,255,255,.1)}
+  .container{max-width:760px;margin:0 auto;padding:20px 16px 60px}
+  .page-title{font-size:22px;font-weight:600;color:#1a1a1a;margin:24px 0 4px}
+  .page-sub{font-size:13px;color:#666;margin-bottom:20px}
+  .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:20px}
+  .stat{background:#fff;border:1px solid #E8E6E0;border-radius:10px;padding:14px 16px}
+  .stat-lbl{font-size:12px;color:#888;margin-bottom:4px}
+  .stat-val{font-size:26px;font-weight:600;color:#1a1a1a}
+  .stat-val.purple{color:#534AB7}
+  .stat-val.teal{color:#0F6E56}
+  .filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+  .filter-btn{background:#fff;border:1px solid #E0DED8;border-radius:6px;padding:6px 12px;font-size:12px;font-weight:500;color:#666;cursor:pointer;font-family:inherit}
+  .filter-btn.active{background:#EEEDFE;border-color:#AFA9EC;color:#3C3489}
+  .filter-btn:hover:not(.active){background:#FAFAF8}
+  .refresh-btn{background:#534AB7;color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;margin-left:auto}
+  .refresh-btn:hover{background:#3C3489}
+  .resp-card{background:#fff;border:1px solid #E8E6E0;border-radius:12px;margin-bottom:8px;overflow:hidden}
+  .resp-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;user-select:none}
+  .resp-hdr:hover{background:#FAFAF8}
+  .resp-name{font-size:15px;font-weight:500;color:#1a1a1a}
+  .resp-cargo{font-size:12px;color:#999;margin-top:1px}
+  .resp-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+  .badge{display:inline-block;font-size:11px;padding:3px 9px;border-radius:20px;font-weight:500}
+  .badge-ok{background:#E1F5EE;color:#085041}
+  .badge-pend{background:#FAEEDA;color:#633806}
+  .badge-purple{background:#EEEDFE;color:#3C3489}
+  .resp-date{font-size:11px;color:#bbb}
+  .chev{font-size:11px;color:#bbb;transition:transform .15s}
+  .chev.open{transform:rotate(180deg)}
+  .resp-body{display:none;border-top:1px solid #F0EEE8;padding:14px 16px}
+  .resp-body.open{display:block}
+  .sec-hdr{font-size:11px;font-weight:700;letter-spacing:.06em;color:#534AB7;text-transform:uppercase;margin:14px 0 8px}
+  .sec-hdr.teal{color:#0F6E56}
+  .sec-hdr:first-child{margin-top:0}
+  .day-block{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #F5F4F1}
+  .day-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+  .day-title{font-size:12px;font-weight:600;color:#888;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+  .week-pill{display:inline-block;font-size:10px;padding:1px 7px;border-radius:10px;background:#EEEDFE;color:#3C3489;font-weight:600}
+  .day-feito{font-size:13px;color:#1a1a1a;line-height:1.6;white-space:pre-wrap}
+  .day-meta{font-size:12px;color:#888;margin-top:3px}
+  .day-pend{font-size:12px;color:#854F0B;margin-top:2px}
+  .fech-item{margin-bottom:8px}
+  .fech-lbl{font-size:11px;color:#aaa;margin-bottom:2px}
+  .fech-val{font-size:13px;color:#1a1a1a;line-height:1.5;white-space:pre-wrap}
+  .empty{text-align:center;padding:40px 20px;color:#aaa;font-size:14px}
+  .loading-msg{text-align:center;padding:40px 20px;color:#888;font-size:14px}
+  .export-btn{background:#F0EEE8;border:1px solid #E0DED8;border-radius:6px;padding:6px 12px;font-size:12px;color:#555;cursor:pointer;font-family:inherit}
+  .export-btn:hover{background:#E8E6E0}
+  @media(max-width:480px){.resp-right{gap:4px}.topbar{padding:12px 16px}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div>
+    <div class="topbar-title">Espaço Junior · Painel do Gestor</div>
+    <div class="topbar-sub">Quinzena 27/04 – 08/05</div>
+  </div>
+  <a class="topbar-link" href="index.html">← Formulário</a>
+</div>
+
+<div class="container">
+  <div class="page-title">Registros da equipe</div>
+  <p class="page-sub" id="last-update">Carregando...</p>
+
+  <div class="stat-grid" id="stats">
+    <div class="stat"><div class="stat-lbl">Registros enviados</div><div class="stat-val purple" id="s-total">—</div></div>
+    <div class="stat"><div class="stat-lbl">Com fechamento semanal</div><div class="stat-val" id="s-fech">—</div></div>
+    <div class="stat"><div class="stat-lbl">Com reflexão quinzenal</div><div class="stat-val teal" id="s-qfin">—</div></div>
+    <div class="stat"><div class="stat-lbl">Pendências abertas</div><div class="stat-val" id="s-pend" style="color:#854F0B">—</div></div>
+  </div>
+
+  <div class="filter-row">
+    <button class="filter-btn active" onclick="filtrar('todos',this)">Todos</button>
+    <button class="filter-btn" onclick="filtrar('com-fech',this)">Com fechamento</button>
+    <button class="filter-btn" onclick="filtrar('sem-fech',this)">Sem fechamento</button>
+    <button class="filter-btn" onclick="filtrar('com-qfin',this)">Com reflexão quinzenal</button>
+    <button class="export-btn" onclick="exportarCSV()">Exportar CSV</button>
+    <button class="refresh-btn" onclick="carregar()">Atualizar</button>
+  </div>
+
+  <div id="lista"></div>
+</div>
+
+<script>
+const BIN_ID = window.JSONBIN_ID || '';
+const API_KEY = window.JSONBIN_KEY || '';
+
+const FECH_LABELS = {
+  entrega:'Principal entrega', naofoi:'Não foi possível', obstaculo:'Maior obstáculo',
+  prioridades:'Próxima semana', lideranca:'Precisa da liderança'
+};
+const QFIN_LABELS = {
+  q1:'Balanço geral', q2:'Resultado para o negócio', q3:'O que se repetiu',
+  q4:'Capacidade e volume', q5:'O que faria diferente', q6:'Próxima prioridade', q7:'Precisa da liderança'
+};
+
+let todosRegistros = [];
+let filtroAtivo = 'todos';
+
+async function carregar() {
+  const lista = document.getElementById('lista');
+  lista.innerHTML = '<div class="loading-msg">Carregando registros...</div>';
+  try {
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+      headers: { 'X-Master-Key': API_KEY }
+    });
+    const data = await res.json();
+    todosRegistros = data.record?.registros || [];
+    todosRegistros.sort((a,b) => new Date(b.ts) - new Date(a.ts));
+    renderizar();
+    const now = new Date().toLocaleString('pt-BR');
+    document.getElementById('last-update').textContent = `Última atualização: ${now}`;
+  } catch(e) {
+    lista.innerHTML = '<div class="empty">Erro ao carregar. Verifique a conexão.</div>';
+  }
+}
+
+function temFech(r) {
+  return (r.fechS1 && Object.values(r.fechS1).some(v=>v)) ||
+         (r.fechS2 && Object.values(r.fechS2).some(v=>v));
+}
+function temQfin(r) { return r.quinzenal && Object.values(r.quinzenal).some(v=>v); }
+function contaPend(r) {
+  let n = 0;
+  if(r.dias) Object.values(r.dias).forEach(d => { if(d.pend) n++; });
+  return n;
+}
+
+function renderizar() {
+  let lista = todosRegistros;
+  if(filtroAtivo === 'com-fech') lista = lista.filter(temFech);
+  if(filtroAtivo === 'sem-fech') lista = lista.filter(r => !temFech(r));
+  if(filtroAtivo === 'com-qfin') lista = lista.filter(temQfin);
+
+  const totalPend = todosRegistros.reduce((acc,r) => acc + contaPend(r), 0);
+  document.getElementById('s-total').textContent = todosRegistros.length;
+  document.getElementById('s-fech').textContent = todosRegistros.filter(temFech).length;
+  document.getElementById('s-qfin').textContent = todosRegistros.filter(temQfin).length;
+  document.getElementById('s-pend').textContent = totalPend;
+
+  const cont = document.getElementById('lista');
+  if(lista.length === 0) { cont.innerHTML = '<div class="empty">Nenhum registro encontrado.</div>'; return; }
+
+  cont.innerHTML = '';
+  lista.forEach((r, idx) => {
+    const dt = new Date(r.ts).toLocaleDateString('pt-BR', {day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+    const fech = temFech(r);
+    const qfin = temQfin(r);
+    const pends = contaPend(r);
+    const card = document.createElement('div');
+    card.className = 'resp-card';
+    card.dataset.filter = (fech?'com-fech':'sem-fech') + (qfin?' com-qfin':'');
+
+    let diasHtml = '';
+    if(r.dias) {
+      const diasArr = Object.values(r.dias).filter(d => d.feito||d.vol||d.imp||d.pend);
+      if(diasArr.length > 0) {
+        diasHtml = '<div class="sec-hdr">Registro diário</div>';
+        diasArr.forEach(d => {
+          const semLbl = d.sem==='s1'?'Sem 1':'Sem 2';
+          diasHtml += `<div class="day-block">
+            <div class="day-title">${d.dia} ${d.dt} <span class="week-pill">${semLbl}</span></div>
+            ${d.feito?`<div class="day-feito">${d.feito}</div>`:''}
+            ${d.vol||d.imp?`<div class="day-meta">${d.vol?'Volume: '+d.vol:''}${d.vol&&d.imp?' · ':''}${d.imp?'Imprevisto: '+d.imp:''}</div>`:''}
+            ${d.pend?`<div class="day-pend">Pendência: ${d.pend}</div>`:''}
+          </div>`;
+        });
+      }
+    }
+
+    let fechHtml = '';
+    ['s1','s2'].forEach(sid => {
+      const fb = sid==='s1'?r.fechS1:r.fechS2;
+      if(!fb||!Object.values(fb).some(v=>v)) return;
+      fechHtml += `<div class="sec-hdr">Fechamento ${sid==='s1'?'Semana 1':'Semana 2'}</div>`;
+      Object.entries(FECH_LABELS).forEach(([k,lbl]) => {
+        if(fb[k]) fechHtml += `<div class="fech-item"><div class="fech-lbl">${lbl}</div><div class="fech-val">${fb[k]}</div></div>`;
+      });
+    });
+
+    let qfinHtml = '';
+    if(qfin) {
+      qfinHtml = '<div class="sec-hdr teal">Reflexão quinzenal</div>';
+      Object.entries(QFIN_LABELS).forEach(([k,lbl]) => {
+        if(r.quinzenal[k]) qfinHtml += `<div class="fech-item"><div class="fech-lbl">${lbl}</div><div class="fech-val">${r.quinzenal[k]}</div></div>`;
+      });
+    }
+
+    card.innerHTML = `
+      <div class="resp-hdr" onclick="toggleResp(${idx})">
+        <div>
+          <div class="resp-name">${r.nome||'Sem nome'}</div>
+          <div class="resp-cargo">${r.cargo||''}</div>
+        </div>
+        <div class="resp-right">
+          ${fech?'<span class="badge badge-ok">Fechamento ✓</span>':'<span class="badge badge-pend">Sem fechamento</span>'}
+          ${qfin?'<span class="badge badge-purple">Quinzenal ✓</span>':''}
+          ${pends>0?`<span class="badge badge-pend">${pends} pendência${pends>1?'s':''}</span>`:''}
+          <span class="resp-date">${dt}</span>
+          <span class="chev" id="chev-r-${idx}">▼</span>
+        </div>
+      </div>
+      <div class="resp-body" id="rb-${idx}">
+        ${diasHtml}${fechHtml}${qfinHtml}
+        ${!diasHtml&&!fechHtml&&!qfinHtml?'<div style="font-size:13px;color:#aaa;padding:4px 0">Nenhum campo preenchido além do nome.</div>':''}
+      </div>`;
+    cont.appendChild(card);
+  });
+}
+
+function toggleResp(idx) {
+  const b = document.getElementById('rb-'+idx);
+  const c = document.getElementById('chev-r-'+idx);
+  const open = b.classList.contains('open');
+  b.classList.toggle('open', !open);
+  if(c) c.classList.toggle('open', !open);
+}
+
+function filtrar(tipo, btn) {
+  filtroAtivo = tipo;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderizar();
+}
+
+function exportarCSV() {
+  if(!todosRegistros.length) { alert('Nenhum registro para exportar.'); return; }
+  const rows = [['Nome','Cargo','Data envio','Dia','Data','Feito','Volume','Imprevistos','Pendências']];
+  todosRegistros.forEach(r => {
+    const dt = new Date(r.ts).toLocaleString('pt-BR');
+    if(r.dias) {
+      Object.values(r.dias).forEach(d => {
+        rows.push([r.nome,r.cargo,dt,d.dia,d.dt,d.feito,d.vol,d.imp,d.pend].map(v=>`"${(v||'').replace(/"/g,'""')}"`));
+      });
+    }
+  });
+  const csv = rows.map(r=>r.join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);
+  a.download = 'registros_quinzena_2704.csv';
+  a.click();
+}
+
+carregar();
+setInterval(carregar, 60000);
+</script>
+</body>
+</html>
