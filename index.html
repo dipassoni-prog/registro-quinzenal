@@ -108,8 +108,8 @@
 </div>
 
 <script>
-const BIN_ID = window.JSONBIN_ID || '';
-const API_KEY = window.JSONBIN_KEY || '';
+const BIN_ID = '69ef51cf856a6821897a13d2';
+const API_KEY = '$2a$10$NpBKboOocUf7iqhhjCkP1OsT9hlwPPZ3Hpswa34MHOqBR1qjkvIna';
 
 const SEMANAS = [
   {id:'s1', label:'Semana 1', sexta:'30/04', dias:[
@@ -270,17 +270,17 @@ async function salvar() {
 
   try {
     // Busca registros existentes
-    const getRes = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-      headers: { 'X-Master-Key': API_KEY }
+    const getRes = await fetch(`https://api.jsonbin.io/v3/b/69ef51cf856a6821897a13d2/latest`, {
+      headers: { 'X-Master-Key': '$2a$10$NpBKboOocUf7iqhhjCkP1OsT9hlwPPZ3Hpswa34MHOqBR1qjkvIna' }
     });
     const existing = await getRes.json();
     const registros = existing.record?.registros || [];
     registros.push(d);
 
     // Salva atualizado
-    await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+    await fetch(`https://api.jsonbin.io/v3/b/69ef51cf856a6821897a13d2`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
+      headers: { 'Content-Type': 'application/json', 'X-Master-Key': '$2a$10$NpBKboOocUf7iqhhjCkP1OsT9hlwPPZ3Hpswa34MHOqBR1qjkvIna' },
       body: JSON.stringify({ registros })
     });
 

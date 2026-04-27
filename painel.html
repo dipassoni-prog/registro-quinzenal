@@ -96,8 +96,8 @@
 </div>
 
 <script>
-const BIN_ID = window.JSONBIN_ID || '';
-const API_KEY = window.JSONBIN_KEY || '';
+const BIN_ID = '69ef51cf856a6821897a13d2';
+const API_KEY = '$2a$10$NpBKboOocUf7iqhhjCkP1OsT9hlwPPZ3Hpswa34MHOqBR1qjkvIna';
 
 const FECH_LABELS = {
   entrega:'Principal entrega', naofoi:'Não foi possível', obstaculo:'Maior obstáculo',
@@ -115,8 +115,8 @@ async function carregar() {
   const lista = document.getElementById('lista');
   lista.innerHTML = '<div class="loading-msg">Carregando registros...</div>';
   try {
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-      headers: { 'X-Master-Key': API_KEY }
+    const res = await fetch(`https://api.jsonbin.io/v3/b/69ef51cf856a6821897a13d2/latest`, {
+      headers: { 'X-Master-Key': '$2a$10$NpBKboOocUf7iqhhjCkP1OsT9hlwPPZ3Hpswa34MHOqBR1qjkvIna' }
     });
     const data = await res.json();
     todosRegistros = data.record?.registros || [];
