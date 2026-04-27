@@ -270,15 +270,14 @@ async function salvar() {
 
   try {
     // Busca registros existentes
-    const getRes = await fetch(`https://api.jsonbin.io/v3/b/69ef51cf856a6821897a13d2/latest`, {
-      headers: { 'X-Master-Key': '$2a$10$NpBKboOocUf7iqhhjCkP1OsT9hlwPPZ3Hpswa34MHOqBR1qjkvIna' }
+    const getRes = await fetch(`https://api.npoint.io/4a3111cb9e8b03c14a52`, {
     });
     const existing = await getRes.json();
-    const registros = existing.record?.registros || [];
+    const registros = existing.registros || [];
     registros.push(d);
 
     // Salva atualizado
-    await fetch(`https://api.jsonbin.io/v3/b/69ef51cf856a6821897a13d2`, {
+    await fetch(`https://api.npoint.io/4a3111cb9e8b03c14a52`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', 'X-Master-Key': '$2a$10$NpBKboOocUf7iqhhjCkP1OsT9hlwPPZ3Hpswa34MHOqBR1qjkvIna' },
       body: JSON.stringify({ registros })

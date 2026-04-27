@@ -115,11 +115,10 @@ async function carregar() {
   const lista = document.getElementById('lista');
   lista.innerHTML = '<div class="loading-msg">Carregando registros...</div>';
   try {
-    const res = await fetch(`https://api.jsonbin.io/v3/b/69ef51cf856a6821897a13d2/latest`, {
-      headers: { 'X-Master-Key': '$2a$10$NpBKboOocUf7iqhhjCkP1OsT9hlwPPZ3Hpswa34MHOqBR1qjkvIna' }
+    const res = await fetch(`https://api.npoint.io/4a3111cb9e8b03c14a52`, {
     });
     const data = await res.json();
-    todosRegistros = data.record?.registros || [];
+    todosRegistros = data.registros || [];
     todosRegistros.sort((a,b) => new Date(b.ts) - new Date(a.ts));
     renderizar();
     const now = new Date().toLocaleString('pt-BR');
