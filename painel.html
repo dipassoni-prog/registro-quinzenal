@@ -115,8 +115,7 @@ async function carregar() {
   const lista = document.getElementById('lista');
   lista.innerHTML = '<div class="loading-msg">Carregando registros...</div>';
   try {
-    const res = await fetch(`https://api.npoint.io/4a3111cb9e8b03c14a52`, {
-    });
+    const res = await fetch(`https://script.google.com/macros/s/AKfycbx8w1xSwrU6LKuNpvwkZ3CqyspUrjNW5Zi9YpdJQ6dKb3WiTlkfGnX553cWM_IoOcJcKA/exec`);
     const data = await res.json();
     todosRegistros = data.registros || [];
     todosRegistros.sort((a,b) => new Date(b.ts) - new Date(a.ts));

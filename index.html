@@ -269,20 +269,11 @@ async function salvar() {
   loading.style.display = 'block';
 
   try {
-    // Busca registros existentes
-    const getRes = await fetch(`https://api.npoint.io/4a3111cb9e8b03c14a52`, {
+    await fetch(`https://script.google.com/macros/s/AKfycbx8w1xSwrU6LKuNpvwkZ3CqyspUrjNW5Zi9YpdJQ6dKb3WiTlkfGnX553cWM_IoOcJcKA/exec`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(d)
     });
-    const existing = await getRes.json();
-    const registros = existing.registros || [];
-    registros.push(d);
-
-    // Salva atualizado
-    await fetch(`https://api.npoint.io/4a3111cb9e8b03c14a52`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'X-Master-Key': '$2a$10$NpBKboOocUf7iqhhjCkP1OsT9hlwPPZ3Hpswa34MHOqBR1qjkvIna' },
-      body: JSON.stringify({ registros })
-    });
-
     loading.style.display = 'none';
     toast.style.display = 'block';
     localStorage.removeItem(DRAFT_KEY);
