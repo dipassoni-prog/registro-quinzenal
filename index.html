@@ -341,12 +341,12 @@ function limpar() {
 }
 
 buildForm();
-setTimeout(() => {
-  restaurarDraft();
-  document.querySelectorAll("textarea, input[type=text]").forEach(el => {
-    el.addEventListener("input", autoSave);
-  });
-}, 100);
+restaurarDraft();
+
+// Autosave com delegação de eventos — funciona em todos os campos, inclusive dinâmicos
+document.addEventListener("input", function(e) {
+  if(e.target.matches("textarea, input[type=text]")) autoSave();
+});
 </script>
 </body>
 </html>
